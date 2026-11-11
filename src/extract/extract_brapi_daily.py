@@ -14,7 +14,7 @@ dotenv.load_dotenv()
 
 BRAPI_TOKEN = os.getenv("BRAPI_TOKEN")
 
-path_storage = "../storage"
+path_storage = "./storage/teste"
 
 engine = sqlalchemy.create_engine("sqlite:///test.db")
 
@@ -27,16 +27,9 @@ extract_list = [
     "BTC"
 ]
 
-url = f"https://brapi.dev/api/v2/stocks/quote?symbols=BTC&token={BRAPI_TOKEN}"
-resp = requests.get(url)
-response = resp.json()
-
-print(response)
-
-# %%
-
 colunas = [
-    "data.shortName",
+    "symbol",
+    "data.longName",
     "data.regularMarketPreviousClose",
     "data.regularMarketPrice",
     "data.regularMarketDayHigh",
@@ -48,6 +41,7 @@ colunas = [
 ]
 
 colunas_novas = [
+    "symbol",
     "name",
     "marketprice",
     "marketdayhigh",
@@ -60,12 +54,22 @@ colunas_novas = [
 ]
 
 # %%
+url = f"https://brapi.dev/api/v2/stocks/quote?symbols=PETR4&token={BRAPI_TOKEN}"
+resp = requests.get(url)
+response = resp.json()
 
-df = pd.json_normalize(response["results"])[colunas]
-
-# df
-
-df = df.to_parquet()
+print(response)
 
 # %%
 
+df = pd.json_normalize(response["results"])
+# df = pd.json_normalize(response["results"])[colunas]
+
+df
+
+# %%
+
+df = df.to_parquet(path=f"{path_storage}.parquet")
+# df = df.to_csv(f"{path_storage}.csv", sep=";")
+
+# %%
