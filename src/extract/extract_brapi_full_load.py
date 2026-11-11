@@ -70,3 +70,4 @@ df = df.to_parquet()
 # %%
 
 # teste
+# teste 2 - issues
