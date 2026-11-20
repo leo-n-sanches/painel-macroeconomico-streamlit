@@ -15,8 +15,6 @@ BRAPI_TOKEN = os.getenv("BRAPI_TOKEN")
 path_storage = "./storage/"
 data_range = "&interval=1d&range=3mo"
 
-engine = sqlalchemy.create_engine("sqlite:///test.db")
-
 extract_list = [
     "PETR4",
     "ITUB4",

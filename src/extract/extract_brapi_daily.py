@@ -16,8 +16,6 @@ BRAPI_TOKEN = os.getenv("BRAPI_TOKEN")
 
 path_storage = "./storage/"
 
-engine = sqlalchemy.create_engine("sqlite:///test.db")
-
 extract_list = [
     "PETR4",
     "ITUB4",
@@ -27,20 +25,20 @@ extract_list = [
     "BTC"
 ]
 
-colunas = [
-    "symbol",
-    "data.longName",
-    "data.regularMarketPreviousClose",
-    "data.regularMarketPrice",
-    "data.regularMarketDayHigh",
-    "data.regularMarketDayLow",
-    "data.regularMarketDayRange",
-    "data.regularMarketChange",
-    "data.regularMarketChangePercent",
-    "data.regularMarketTime"
-]
+colunas_novas = {
+    "symbol" : "symbol",
+    "data.longName" : "name",
+    "data.regularMarketPreviousClose" : "marketprice",
+    "data.regularMarketPrice" : "marketdayhigh",
+    "data.regularMarketDayHigh" : "marketdaylow",
+    "data.regularMarketDayLow" : "marketdayrange",
+    "data.regularMarketDayRange" : "marketchange",
+    "data.regularMarketChange" : "marketchangepercent",
+    "data.regularMarketChangePercent" : "time",
+    "data.regularMarketTime" : "marketpreviousprice",
+}
 
-colunas_novas = [
+colunas = [
     "symbol",
     "name",
     "marketprice",
@@ -50,26 +48,50 @@ colunas_novas = [
     "marketchange",
     "marketchangepercent",
     "time",
-    "marketpreviousprice"
+    "marketpreviousprice",
 ]
 
 # %%
-url = f"https://brapi.dev/api/v2/stocks/quote?symbols=PETR4&token={BRAPI_TOKEN}"
-resp = requests.get(url)
+
+def teste(extract_list, BRAPI_TOKEN):
+
+    urls = []
+
+    for i in extract_list:
+        url = f"https://brapi.dev/api/v2/stocks/quote?symbols={i}&token={BRAPI_TOKEN}"
+        urls.append(url)
+
+    return urls
+
+urls = teste(extract_list, BRAPI_TOKEN)
+
+# %%
+
+resp = requests.get(urls)
 response = resp.json()
-
-print(response)
-
-# %%
-
-df = pd.json_normalize(response["results"])
-# df = pd.json_normalize(response["results"])[colunas]
-
-df
+df = pd.json_normalize(response["results"])[colunas]
 
 # %%
 
-df = df.to_parquet(path=f"{path_storage}.parquet")
-# df = df.to_csv(f"{path_storage}.csv", sep=";")
+def teste2(urls):
+
+    lista_df = []
+
+    for url in urls:
+        resp = requests.get(url)
+        response = resp.json()
+        df_temp = pd.json_normalize(response["results"])
+        df_temp = df_temp.rename(columns=colunas_novas)[colunas]
+        lista_df.append(df_temp)
+        
+    return lista_df
+
+lista_df = teste2(urls)
 
 # %%
+
+for i, df in zip(extract_list, lista_df):
+    df.to_parquet(path=f"{path_storage}{i}_daily.parquet", index=False)
+
+
+
