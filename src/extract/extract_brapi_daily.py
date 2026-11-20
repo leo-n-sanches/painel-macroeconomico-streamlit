@@ -14,7 +14,7 @@ dotenv.load_dotenv()
 
 BRAPI_TOKEN = os.getenv("BRAPI_TOKEN")
 
-path_storage = "./storage/teste"
+path_storage = "./storage/"
 
 engine = sqlalchemy.create_engine("sqlite:///test.db")
 
