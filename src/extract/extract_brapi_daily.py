@@ -12,11 +12,12 @@ from botocore.exceptions import ClientError
 
 dotenv.load_dotenv()
 
-path_storage = "./storage/brapi/cdc/"
 BRAPI_TOKEN = os.getenv("BRAPI_TOKEN")
 S3_BUCKET = os.getenv("S3_BUCKET")
 S3_REGION = os.getenv("S3_REGION")
 s3_route = "painel_macro/cdc/brapi/"
+
+path_storage = "./storage/brapi/cdc/"
 
 extract_list = [
     "PETR4",
@@ -55,9 +56,7 @@ colunas = [
     "marketpreviousprice",
 ]
 
-# %%
-
-class Brapi_S3_Pipeline:
+class Brapi_S3_Pipeline_cdc:
     def __init__(self, 
                  S3_BUCKET: str, 
                  s3_route: str, 
@@ -127,8 +126,14 @@ class Brapi_S3_Pipeline:
             except ClientError as erro:
                 print(f"Erro ao enviar {file_name}: {erro}")
 
+    def exec_all(self, extract_list: list[str], extract_list_small: list[str]):
+        resultado = self.extract_urls(extract_list=extract_list)
+        df_list = self.list_dfs(urls=resultado)
+        self.save_files(extract_list_small=extract_list_small, df_list=df_list)
 
-pipeline = Brapi_S3_Pipeline(
+# %%
+
+pipeline = Brapi_S3_Pipeline_cdc(
     S3_BUCKET=S3_BUCKET,
     s3_route=s3_route,
     path_storage=path_storage,
@@ -136,8 +141,4 @@ pipeline = Brapi_S3_Pipeline(
     BRAPI_TOKEN=BRAPI_TOKEN
     )
 
-resultado = pipeline.extract_urls(extract_list=extract_list)
-df_list = pipeline.list_dfs(urls=resultado)
-pipeline.save_files(extract_list_small=extract_list_small, df_list=df_list)
-
-# %%
+# pipeline.exec_all(extract_list=extract_list, extract_list_small=extract_list_small)
