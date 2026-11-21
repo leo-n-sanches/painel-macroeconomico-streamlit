@@ -8,6 +8,34 @@ resolution-markers = [
 ]
 
 [[package]]
+name = "boto3"
+version = "1.44.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "botocore" },
+    { name = "jmespath" },
+    { name = "s3transfer" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e9/43/710e43de1b424bd0b45efbfcde5bc27d96a9f8c4986428f02bd8b6eb1b3e/boto3-1.44.7.tar.gz", hash = "sha256:cc19922a2db90ac98f259b5290e08fcf7143a314eb6b2e430afec26a5d1f4e10", size = 112766, upload-time = "2026-11-19T20:34:14.541Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/55/39/1b35b73d9f62c9a722ece0eed6673de7a56803bfb1f89926a36445cceab9/boto3-1.44.7-py3-none-any.whl", hash = "sha256:15fac273416d37cd5e3f0c02b33fd8d7f27d3e64c5f64b911f8b953772302609", size = 140157, upload-time = "2026-11-19T20:34:12.236Z" },
+]
+
+[[package]]
+name = "botocore"
+version = "1.44.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "jmespath" },
+    { name = "python-dateutil" },
+    { name = "urllib3" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fe/b8/2140072cf06a608114614d8efde2ecd76cc24edf81d83263269412d0aa93/botocore-1.44.7.tar.gz", hash = "sha256:3cbf1d9f50b5f1f95b715e570bc03b8c7c94b86777f96dd647321134f57290b2", size = 17046633, upload-time = "2026-11-19T20:34:08.792Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0b/47/a6d5d012e4d6e70f80d4d0dffac7622f8f64edce635200ea23a3c531f397/botocore-1.44.7-py3-none-any.whl", hash = "sha256:56ec7cf3a7c0012c7e105c8f498c67077afa722df916dbdbe667b584fe7e5f99", size = 16741609, upload-time = "2026-11-19T20:34:04.837Z" },
+]
+
+[[package]]
 name = "certifi"
 version = "2026.10.23"
 source = { registry = "https://pypi.org/simple" }
@@ -74,6 +102,19 @@ wheels = [
 ]
 
 [[package]]
+name = "datetime"
+version = "6.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytz" },
+    { name = "zope-interface" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/77/32/decbfd165e9985ba9d8c2d34a39afe5aeba2fc3fe390eb6e9ef1aab98fa8/datetime-6.0.tar.gz", hash = "sha256:c1514936d2f901e10c8e08d83bf04e6c9dbd7ca4f244da94fec980980a3bc4d5", size = 64167, upload-time = "2025-11-25T08:00:34.586Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/cf/7a/ea0f3e3ea74be36fc7cf54f966cde732a3de72697983cdb5646b0a4dacde/datetime-6.0-py3-none-any.whl", hash = "sha256:d19988f0657a4e72c9438344157254a8dcad6aea8cd5ae70a5d1b5a75e5dc930", size = 52637, upload-time = "2025-11-25T08:00:33.077Z" },
+]
+
+[[package]]
 name = "dotenv"
 version = "0.9.9"
 source = { registry = "https://pypi.org/simple" }
@@ -91,6 +132,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f5/08/8eea9d4b8302028f3abb2c0813953f7aec26d33b7a8960ed760e65ff29fa/idna-3.20.tar.gz", hash = "sha256:a7db850025b95ded1eae8a46181a1a6c56c92c96f0e2b005d9ff8dc0210cab44", size = 216463, upload-time = "2026-09-17T14:11:04.752Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/58/a2/bb081bab032533a855d44de1d56f8e8426114ff1ba5d1f07a438a0a654f8/idna-3.20-py3-none-any.whl", hash = "sha256:ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c", size = 69583, upload-time = "2026-09-17T14:11:03.168Z" },
+]
+
+[[package]]
+name = "jmespath"
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d3/59/322338183ecda247fb5d1763a6cbe46eff7222eaeebafd9fa65d4bf5cb11/jmespath-1.1.0.tar.gz", hash = "sha256:472c87d80f36026ae83c6ddd0f1d05d4e510134ed462851fd5f754c8c3cbb88d", size = 27377, upload-time = "2026-01-22T16:35:26.279Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/14/2f/967ba146e6d58cf6a652da73885f52fc68001525b4197effc174321d70b4/jmespath-1.1.0-py3-none-any.whl", hash = "sha256:a5663118de4908c91729bea0acadca56526eb2698e83de10cd116ae0f4e97c64", size = 20419, upload-time = "2026-01-22T16:35:24.919Z" },
 ]
 
 [[package]]
@@ -128,6 +178,8 @@ name = "painel-macroeconomico-streamlit"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "boto3" },
+    { name = "datetime" },
     { name = "dotenv" },
     { name = "pandas" },
     { name = "pyarrow" },
@@ -137,6 +189,8 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "boto3", specifier = ">=1.44.7" },
+    { name = "datetime", specifier = ">=6.0" },
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "pandas", specifier = ">=3.1.0" },
     { name = "pyarrow", specifier = ">=26.0.0" },
@@ -197,15 +251,14 @@ wheels = [
 
 [[package]]
 name = "python-dateutil"
-version = "3.0.0"
+version = "2.9.0.post0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "six" },
-    { name = "tzdata" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/0e/df/f15f80383f152452d8985b36d95cb8751f901a3e0ff4cd27f7e118f168e2/python_dateutil-3.0.0.tar.gz", hash = "sha256:7ebcb3c29a92f3ceafe79a7a48a5c45677e9e004bbeec5742ac0bbb00560b7a2", size = 271066, upload-time = "2026-10-21T23:41:45.075Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/66/c0/0c8b6ad9f17a802ee498c46e004a0eb49bc148f2fd230864601a86dcf6db/python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3", size = 342432, upload-time = "2024-03-01T18:36:20.211Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5a/17/cebee01d1c0c1441174cf0456ddc91b280d79acb65340c05e41d77866ee8/python_dateutil-3.0.0-py2.py3-none-any.whl", hash = "sha256:3c79630202e4152c6add678446984236efe4f57e84d8e892aab0637bab82e9fd", size = 94659, upload-time = "2026-10-21T23:41:43.431Z" },
+    { url = "https://files.pythonhosted.org/packages/ec/57/56b9bcc3c9c6a792fcbaf139543cee77261f3651ca9da0c93f5c1221264b/python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427", size = 229892, upload-time = "2024-03-01T18:36:18.57Z" },
 ]
 
 [[package]]
@@ -215,6 +268,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/74/26/2fbeedb218a787a5eea551c7532cac4e009f83d689dd2faa0d0353473f86/python_dotenv-1.2.4.tar.gz", hash = "sha256:f0d53e69935a851c0dcc78f3ab7aaccd8cabef0b92382b576b824212902873c0", size = 60824, upload-time = "2026-10-01T05:36:10Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/60/d1/38f3a3405989a89ac18390803e70c6ad7c7760da4f9b83cbeca0c44a0c72/python_dotenv-1.2.4-py3-none-any.whl", hash = "sha256:42269a8a5b3fd54ffa6f3d84b18abed50064717576b4ecf03dc4a55d8aa04fdc", size = 23266, upload-time = "2026-10-01T05:36:08.633Z" },
+]
+
+[[package]]
+name = "pytz"
+version = "2026.6"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f5/b0/168030b0bfcc334cf09fa3313afdb888d892c8a0027324683d1de0ec277e/pytz-2026.6.tar.gz", hash = "sha256:3b0fc2727707663d6e517936f444fd8a8b240f1fc32f4bf7ee03274245945284", size = 318520, upload-time = "2026-10-29T09:05:47.011Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b6/25/564f3fc5b70c1398d706c51f2b1470d0ea0b1b2f96fee67877b6f5bdf3b6/pytz-2026.6-py2.py3-none-any.whl", hash = "sha256:7fed3fee8fd6bd4a2b7b75a8d56021d0624127bf69bd5691f115db929ac570b3", size = 506321, upload-time = "2026-10-29T09:05:45.14Z" },
 ]
 
 [[package]]
@@ -230,6 +292,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ac/c3/e2a2b89f2d3e2179abd6d00ebd70bff6273f37fb3e0cc209f48b39d00cbf/requests-2.34.2.tar.gz", hash = "sha256:f288924cae4e29463698d6d60bc6a4da69c89185ad1e0bcc4104f584e960b9ed", size = 142856, upload-time = "2026-05-14T19:25:27.735Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a0/f4/c67b0b3f1b9245e8d266f0f112c500d50e5b4e83cb6f3b71b6528104182a/requests-2.34.2-py3-none-any.whl", hash = "sha256:2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0", size = 73075, upload-time = "2026-05-14T19:25:26.443Z" },
+]
+
+[[package]]
+name = "s3transfer"
+version = "0.19.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "botocore" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/49/c5/0a5ce655109cb96b8dfad36908a4e108d15f5dc2eff8fbc3146c4312e704/s3transfer-0.19.3.tar.gz", hash = "sha256:8326acc3d056d7f7b8a37110c7d2aea41f67e83f6ae79cd3b5fbcca34c726406", size = 166087, upload-time = "2026-10-19T19:19:49.751Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e2/a4/88f9e10498759121060b8050a1554753dfc04df39bbbcc7aad9ecc8d9440/s3transfer-0.19.3-py3-none-any.whl", hash = "sha256:24eb7535804306355e31c952a90022bf5b2f9d760f9a11062c7493a217c08553", size = 90252, upload-time = "2026-10-19T19:19:48.309Z" },
 ]
 
 [[package]]
@@ -298,4 +372,26 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/e3/05/b17359e1cefb4f909b5e40b1b90a496d987258916dbbf88e842c729f510e/urllib3-2.8.0.tar.gz", hash = "sha256:63bf2ead4c879426ebf22ef2a781eeb4aa3b4ae798a0435506f8687fd5bb9b63", size = 458972, upload-time = "2026-09-15T19:29:36.253Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/92/9d/c4e665119135114480843e7ab388fa94d8480650450e6f8e26b70d323a4c/urllib3-2.8.0-py3-none-any.whl", hash = "sha256:0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3", size = 135717, upload-time = "2026-09-15T19:29:34.577Z" },
+]
+
+[[package]]
+name = "zope-interface"
+version = "8.7"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/de/ff/a1f0021a26033da0df223fd05a7455d6d2881b67daf2c6dc897b4fe0a427/zope_interface-8.7.tar.gz", hash = "sha256:0b47b62e8d0d99b24bcdd32f4f2120425e5019c3bee2ad69a0e1d75737487a96", size = 266343, upload-time = "2026-10-15T07:25:14.851Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/44/e4/66c961c0a4cb7b8561a8855036f8fca6a6e9feac54fc609835e95f57d3a5/zope_interface-8.7-cp315-cp315-macosx_10_9_x86_64.whl", hash = "sha256:6c84d5a260db4de770c9dbff542b28cfe7802c7d286d211d59f32b1b05fb1e69", size = 219298, upload-time = "2026-10-15T07:24:48.785Z" },
+    { url = "https://files.pythonhosted.org/packages/ad/17/c6ae2f1265a9be806841df2890f2e12cbe16ef6287781ee06db3f4e37cef/zope_interface-8.7-cp315-cp315-macosx_11_0_arm64.whl", hash = "sha256:a319373c6fb786f47d816ad16c8bda604438fd4a32ddc77af411d551ec210cd4", size = 219360, upload-time = "2026-10-15T07:24:50.416Z" },
+    { url = "https://files.pythonhosted.org/packages/f4/de/9c7002982a3b2f130375b74e8df0df8c7656e910b1dd61cc89dfa948a425/zope_interface-8.7-cp315-cp315-manylinux1_i686.manylinux2014_i686.manylinux_2_17_i686.manylinux_2_5_i686.whl", hash = "sha256:8dacae53e12f22d6d3041420579c1e1c43cece47525350619a2cc88e93581a2c", size = 280101, upload-time = "2026-10-15T07:24:52.161Z" },
+    { url = "https://files.pythonhosted.org/packages/b3/86/9e545fe873140dc61c875f013e0d873ab006ca7f6ace933e6e9fd81d5e45/zope_interface-8.7-cp315-cp315-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl", hash = "sha256:a0d84e36c426afb6469aa6c4d438d12e18394ace596f5698f835fc434bd0ae1d", size = 282835, upload-time = "2026-10-15T07:24:54.401Z" },
+    { url = "https://files.pythonhosted.org/packages/6a/54/28590cfa4adcc21d5960c3ab2ed5c651b60c084a6d844c1cbafda57cb6d9/zope_interface-8.7-cp315-cp315-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:39299d2f03fb1eada8ee7f754a834d0a4e9d5421284ed7b0d9ea37a8fa0eb58e", size = 282798, upload-time = "2026-10-15T07:24:55.926Z" },
+    { url = "https://files.pythonhosted.org/packages/2b/17/dbfbc44a870f9e87fac9d85d8d48ac49603baf6aaa59898fc7b6c5ca4d08/zope_interface-8.7-cp315-cp315-win_amd64.whl", hash = "sha256:10f15d6b70842405755d6ef128d731ff14f2f655bad56b7fe5d19588c24d08bc", size = 221568, upload-time = "2026-10-15T07:24:57.586Z" },
+    { url = "https://files.pythonhosted.org/packages/d5/8a/b54dbd04a7800e6101b49b64ba7991fda5d7c3b9945a843af0565b87225a/zope_interface-8.7-cp315-cp315-win_arm64.whl", hash = "sha256:31979c1841fb58f69a19a1593348a4e86bfcd5619e02909bd6a0c78a1e670af7", size = 220966, upload-time = "2026-10-15T07:24:59.249Z" },
+    { url = "https://files.pythonhosted.org/packages/99/94/e6ee2713d41b57592d89000b91a847360603726d509c3386a06c223cc366/zope_interface-8.7-cp315-cp315t-macosx_10_9_x86_64.whl", hash = "sha256:f23736eda7fbd9125b41e41e437217c6328dddb303be522b1938a70eeb6eaf1e", size = 220778, upload-time = "2026-10-15T07:25:01.27Z" },
+    { url = "https://files.pythonhosted.org/packages/61/1c/f5d51fdfb1ab50d21f3c4289e079051df8735a6896984107423aebdddd44/zope_interface-8.7-cp315-cp315t-macosx_11_0_arm64.whl", hash = "sha256:8a6f644b6bb37e4248c3f5a526912aa35237a8ad7b9fa512540c4e230c8a4dad", size = 220812, upload-time = "2026-10-15T07:25:03.359Z" },
+    { url = "https://files.pythonhosted.org/packages/ab/c7/7eb16d3cba771959eb7288674aca011b48014c73d0cdb4dc15bc5feec702/zope_interface-8.7-cp315-cp315t-manylinux1_i686.manylinux2014_i686.manylinux_2_17_i686.manylinux_2_5_i686.whl", hash = "sha256:cb074d4e2a5197812ebb954b718f4f989d6c20a4e12c5e4cc6d6ea57d53d571e", size = 308392, upload-time = "2026-10-15T07:25:05.002Z" },
+    { url = "https://files.pythonhosted.org/packages/26/f3/4d5859c3dae41442757e3ee92a9ec2dbebca4aa4ef4e9cda03688afc01e6/zope_interface-8.7-cp315-cp315t-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl", hash = "sha256:c616440ba2237dfdef6cc8a2c4a7fcdb489151cd0b89ae664180b4d9bf2a2f12", size = 314604, upload-time = "2026-10-15T07:25:07.122Z" },
+    { url = "https://files.pythonhosted.org/packages/6d/25/31fc42cbd539734040ed95df708d94a86c6d318b6e508e174760ea73e9c8/zope_interface-8.7-cp315-cp315t-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:cefec3205cac03bb9955d44b95d68ffcfd0bdf8c7ab40a5bd969797279a82b51", size = 319194, upload-time = "2026-10-15T07:25:09.133Z" },
+    { url = "https://files.pythonhosted.org/packages/b0/a4/33055e2590fd00d84ecd1e6d19f69a891a72aade2211fd3740aa317145f7/zope_interface-8.7-cp315-cp315t-win_amd64.whl", hash = "sha256:53672982c9b963c04f2ebbba164d7a7dc4fed4b5e16b5210f37edc96b2e64741", size = 222557, upload-time = "2026-10-15T07:25:11.229Z" },
+    { url = "https://files.pythonhosted.org/packages/f8/f6/e1e0af070c94d3be176f6e44aa9280213aa657de4c6b42320b50d906b417/zope_interface-8.7-cp315-cp315t-win_arm64.whl", hash = "sha256:d964fac37a2877d46d797e8b12496b52e3cb5b5acde10ed1510d873d7875e57e", size = 222179, upload-time = "2026-10-15T07:25:13.112Z" },
 ]
