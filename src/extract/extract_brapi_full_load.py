@@ -1,19 +1,23 @@
 # %%
 
 import os
-
 import dotenv
 import pandas as pd
 import pyarrow
 import requests
-import sqlalchemy
+import boto3
 
 dotenv.load_dotenv()
 
 BRAPI_TOKEN = os.getenv("BRAPI_TOKEN")
 
-path_storage = "./storage/"
+path_storage = "./storage/brapi/full_load/"
 data_range = "&interval=1d&range=3mo"
+
+BRAPI_TOKEN = os.getenv("BRAPI_TOKEN")
+S3_BUCKET = os.getenv("S3_BUCKET")
+S3_REGION = os.getenv("S3_REGION")
+s3_route = "painel_macro/full_load/brapi/"
 
 extract_list = [
     "PETR4",
