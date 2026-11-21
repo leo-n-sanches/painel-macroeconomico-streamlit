@@ -24,4 +24,3 @@ Brapi_S3_Pipeline_cdc(
             )
 
 # %%
-
