@@ -12,18 +12,11 @@ from botocore.exceptions import ClientError
 
 dotenv.load_dotenv()
 
-# %%
-
+path_storage = "./storage/brapi/cdc/"
 BRAPI_TOKEN = os.getenv("BRAPI_TOKEN")
 S3_BUCKET = os.getenv("S3_BUCKET")
 S3_REGION = os.getenv("S3_REGION")
 s3_route = "painel_macro/cdc/brapi/"
-
-s3_client = boto3.client("s3", region_name=S3_REGION)
-
-time_now = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-
-path_storage = "./storage/brapi/cdc/"
 
 extract_list = [
     "PETR4",
@@ -33,6 +26,8 @@ extract_list = [
     "EMBJ3",
     "BTC"
 ]
+
+extract_list_small = [p.lower() for p in extract_list]
 
 colunas_novas = {
     "symbol" : "symbol",
@@ -62,76 +57,87 @@ colunas = [
 
 # %%
 
-def teste(extract_list, BRAPI_TOKEN):
-
-    urls = []
-
-    for i in extract_list:
-        url = f"https://brapi.dev/api/v2/stocks/quote?symbols={i}&token={BRAPI_TOKEN}"
-        urls.append(url)
-
-    return urls
-
-urls = teste(extract_list, BRAPI_TOKEN)
-
-# %%
-
-def teste2(urls):
-
-    lista_df = []
-
-    for url in urls:
-        resp = requests.get(url)
-        response = resp.json()
-        df_temp = pd.json_normalize(response["results"])
-        df_temp = df_temp.rename(columns=colunas_novas)[colunas]
-        lista_df.append(df_temp)
+class Brapi_S3_Pipeline:
+    def __init__(self, 
+                 S3_BUCKET: str, 
+                 s3_route: str, 
+                 path_storage: str, 
+                 S3_REGION: str, 
+                 BRAPI_TOKEN: str
+                 ):
+        self.S3_BUCKET = S3_BUCKET
+        self.s3_route = s3_route
+        self.path_storage = path_storage
+        self.time_now = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        self.s3_client = boto3.client("s3", region_name=S3_REGION)
+        self.BRAPI_TOKEN = BRAPI_TOKEN
         
-    return lista_df
+        self.MAX_ARQUIVOS = 10
+        self.contador = 0
 
-lista_df = teste2(urls)
+    def extract_urls(self, extract_list: list[str]) -> list:
 
-# %%
+        urls = []
 
-extract_list_small = [p.lower() for p in extract_list]
+        for i in extract_list:
+            url = f"https://brapi.dev/api/v2/stocks/quote?symbols={i}&token={self.BRAPI_TOKEN}"
+            urls.append(url)
 
-# file_name = f"{i}/{i}_{time_now}.parquet"
-# file_path = f"{path_storage}{file_name}"
-# route_path = f"{s3_route}{file_name}"
+        return urls
 
-# for i, df in zip(extract_list_small, lista_df):
-#     df.to_parquet(path=file_path, index=False)
+    def list_dfs(self, urls: list[str]) -> list:
 
-# print(route_path)
+        df_list = []
 
-# %%
+        for url in urls:
+            resp = requests.get(url)
+            response = resp.json()
+            df_temp = pd.json_normalize(response["results"])
+            df_temp = df_temp.rename(columns=colunas_novas)[colunas]
+            df_list.append(df_temp)
+            
+        return df_list
 
-MAX_ARQUIVOS = 10
-contador = 0
+    def save_files(self, extract_list_small: list[str], df_list: list[str]):
 
-for i, df in zip(extract_list_small, lista_df):
+        contador = 0
 
-    if contador >= MAX_ARQUIVOS:
-            print("Limite de segurança de carga do s3 ativado")
-            break
+        for i, df in zip(extract_list_small, df_list):
 
-    contador += 1
+            if contador >= self.MAX_ARQUIVOS:
+                    print("Limite de segurança de carga do s3 ativado")
+                    break
 
-    file_name = f"{i}/{i}_{time_now}.parquet"
-    file_path = f"{path_storage}{file_name}"
-    route_path = f"{s3_route}{file_name}"
+            contador = contador + 1
 
-    df.to_parquet(path=file_path, index=False)
+            file_name = f"{i}/{i}_{self.time_now}.parquet"
+            file_path = f"{path_storage}{file_name}"
+            route_path = f"{s3_route}{file_name}"
 
-    try:
-        s3_client.upload_file(
-            Filename=file_path,
-            Bucket=S3_BUCKET,
-            Key=route_path
-        )
-        print(f"Enviado {file_name}")
+            df.to_parquet(path=file_path, index=False)
 
-    except ClientError as erro:
-        print(f"Erro ao enviar {file_name}: {erro}")
+            try:
+                self.s3_client.upload_file(
+                    Filename=file_path,
+                    Bucket=self.S3_BUCKET,
+                    Key=route_path
+                )
+                print(f"Enviado {file_name}. Arquivo {contador} | Limite {self.MAX_ARQUIVOS}")
+
+            except ClientError as erro:
+                print(f"Erro ao enviar {file_name}: {erro}")
+
+
+pipeline = Brapi_S3_Pipeline(
+    S3_BUCKET=S3_BUCKET,
+    s3_route=s3_route,
+    path_storage=path_storage,
+    S3_REGION=S3_REGION,
+    BRAPI_TOKEN=BRAPI_TOKEN
+    )
+
+resultado = pipeline.extract_urls(extract_list=extract_list)
+df_list = pipeline.list_dfs(urls=resultado)
+pipeline.save_files(extract_list_small=extract_list_small, df_list=df_list)
 
 # %%
