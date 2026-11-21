@@ -2,7 +2,7 @@
 
 import os
 import dotenv
-from extract_brapi_daily import Brapi_S3_Pipeline_cdc, extract_list, extract_list_small, path_storage, s3_route
+from extractor_brapi_cdc import Brapi_S3_Pipeline_cdc, extract_list, extract_list_small, path_storage, s3_route
 
 dotenv.load_dotenv()
 
