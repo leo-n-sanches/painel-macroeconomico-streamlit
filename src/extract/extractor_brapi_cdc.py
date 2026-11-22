@@ -15,9 +15,9 @@ dotenv.load_dotenv()
 BRAPI_TOKEN = os.getenv("BRAPI_TOKEN")
 S3_BUCKET = os.getenv("S3_BUCKET")
 S3_REGION = os.getenv("S3_REGION")
-s3_route = "painel_macro/cdc/brapi/"
 
-path_storage = "./storage/brapi/cdc/"
+s3_route_brapi = "painel_macro/cdc/brapi/"
+path_storage_brapi = "./storage/brapi/cdc/"
 
 extract_list = [
     "PETR4",
@@ -56,17 +56,17 @@ colunas = [
     "marketpreviousprice",
 ]
 
-class Brapi_S3_Pipeline_cdc:
+class Brapi_S3_Pipeline_Cdc:
     def __init__(self, 
                  S3_BUCKET: str, 
-                 s3_route: str, 
-                 path_storage: str, 
+                 s3_route_brapi: str, 
+                 path_storage_brapi: str, 
                  S3_REGION: str, 
                  BRAPI_TOKEN: str
                  ):
         self.S3_BUCKET = S3_BUCKET
-        self.s3_route = s3_route
-        self.path_storage = path_storage
+        self.s3_route_brapi = s3_route_brapi
+        self.path_storage_brapi = path_storage_brapi
         self.time_now = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         self.s3_client = boto3.client("s3", region_name=S3_REGION)
         self.BRAPI_TOKEN = BRAPI_TOKEN
@@ -110,8 +110,8 @@ class Brapi_S3_Pipeline_cdc:
             contador = contador + 1
 
             file_name = f"{i}/{i}_{self.time_now}.parquet"
-            file_path = f"{path_storage}{file_name}"
-            route_path = f"{s3_route}{file_name}"
+            file_path = f"{path_storage_brapi}{file_name}"
+            route_path = f"{s3_route_brapi}{file_name}"
 
             df.to_parquet(path=file_path, index=False)
 
@@ -126,19 +126,19 @@ class Brapi_S3_Pipeline_cdc:
             except ClientError as erro:
                 print(f"Erro ao enviar {file_name}: {erro}")
 
-    def exec_all(self, extract_list: list[str], extract_list_small: list[str]):
+    def exec_all_brapi(self, extract_list: list[str], extract_list_small: list[str]):
         resultado = self.extract_urls(extract_list=extract_list)
         df_list = self.list_dfs(urls=resultado)
         self.save_files(extract_list_small=extract_list_small, df_list=df_list)
 
 # %%
 
-pipeline = Brapi_S3_Pipeline_cdc(
+pipeline = Brapi_S3_Pipeline_Cdc(
     S3_BUCKET=S3_BUCKET,
-    s3_route=s3_route,
-    path_storage=path_storage,
+    s3_route_brapi=s3_route_brapi,
+    path_storage_brapi=path_storage_brapi,
     S3_REGION=S3_REGION,
     BRAPI_TOKEN=BRAPI_TOKEN
     )
 
-# pipeline.exec_all(extract_list=extract_list, extract_list_small=extract_list_small)
+# pipeline.exec_all_brapi(extract_list=extract_list, extract_list_small=extract_list_small)
