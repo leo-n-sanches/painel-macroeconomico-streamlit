@@ -6,7 +6,6 @@ from datetime import datetime, timezone
 import boto3
 import dotenv
 import pandas as pd
-import pyarrow
 import requests
 from botocore.exceptions import ClientError
 
@@ -15,11 +14,10 @@ dotenv.load_dotenv()
 # %%
 
 time_now = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-BRAPI_TOKEN = os.getenv("BRAPI_TOKEN")
 S3_BUCKET = os.getenv("S3_BUCKET")
 S3_REGION = os.getenv("S3_REGION")
 s3_route_frank = "painel_macro/cdc/frankfurther/yuan/"
-path_storage_frank = "./storage/frankfurther/cdc/"
+path_storage_frank = "./storage/frankfurther/cdc/yuan/"
 
 colunas = [
     "date",
@@ -28,8 +26,7 @@ colunas = [
 ]
 
 class Etl_Frankfurther_Cdc:
-    def __init__(self, 
-                 BRAPI_TOKEN: str,
+    def __init__(self,
                  S3_BUCKET: str,
                  S3_REGION: str, 
                  s3_route_frank: str, 
@@ -40,14 +37,13 @@ class Etl_Frankfurther_Cdc:
         self.path_storage_frank = path_storage_frank
         self.time_now = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         self.s3_client = boto3.client("s3", region_name=S3_REGION)
-        self.BRAPI_TOKEN = BRAPI_TOKEN
 
     def etl_parquet(self):
         url = "https://api.frankfurter.dev/v2/rate/cny/brl"
         resp = requests.get(url)
         response = resp.json()
         (pd.json_normalize(response)[colunas]
-         .to_parquet(f"{self.path_storage_frank}yuan_{self.time_now}.parquet"))
+         .to_parquet(f"{self.path_storage_frank}yuan_{self.time_now}.parquet", index=False))
 
     def sender_s3(self):
         s3_client = boto3.client("s3", region_name=S3_REGION)
@@ -55,11 +51,16 @@ class Etl_Frankfurther_Cdc:
         file_path = f"{self.path_storage_frank}{file_name}"
         route_path = f"{self.s3_route_frank}{file_name}"
 
-        s3_client.upload_file(
+        try:
+            s3_client.upload_file(
                     Filename=file_path,
                     Bucket=self.S3_BUCKET,
                     Key=route_path
                     )
+            print(f"Enviado {file_name}.")
+
+        except ClientError as erro:
+            print(f"Erro ao enviar {file_name}: {erro}")
 
     def exec_all_frank(self):
         self.etl_parquet()
@@ -72,5 +73,4 @@ class Etl_Frankfurther_Cdc:
 #                 s3_route_frank=s3_route_frank,
 #                 path_storage_frank=path_storage_frank,
 #                 S3_REGION=S3_REGION,
-#                 BRAPI_TOKEN=BRAPI_TOKEN
 #                 ).exec_all_frank()
