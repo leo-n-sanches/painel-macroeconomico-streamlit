@@ -6,7 +6,6 @@ from datetime import datetime, timezone
 import boto3
 import dotenv
 import pandas as pd
-import pyarrow
 import requests
 from botocore.exceptions import ClientError
 

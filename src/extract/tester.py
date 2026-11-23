@@ -1,30 +1,29 @@
 # %%
 
 import os
+
 import dotenv
 import pandas as pd
-import pyarrow
 import requests
-import sqlalchemy
 
 dotenv.load_dotenv()
 BRAPI_TOKEN = os.getenv("BRAPI_TOKEN")
 
 # %%
 
-path_storage1 = "./storage/BTC_daily.parquet"
-path_storage2 = "./storage/BTC_full_load.parquet"
+path_storage1 = "./storage/bcb/cdc/dolar/dolar_teste.parquet"
+# path_storage2 = "./storage/BTC_full_load.parquet"
 
 df1 = pd.read_parquet(path=path_storage1)
-df2 = pd.read_parquet(path=path_storage2)
+# df2 = pd.read_parquet(path=path_storage2)
 
 print(df1)
-print(df2)
+# print(df2)
 
 # %%
 
 df1 = df1.to_csv("daily.csv", sep=";")
-df2 = df2.to_csv("full_load.csv", sep=";")
+# df2 = df2.to_csv("full_load.csv", sep=";")
 
 # %%
 
