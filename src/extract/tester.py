@@ -11,7 +11,7 @@ BRAPI_TOKEN = os.getenv("BRAPI_TOKEN")
 
 # %%
 
-path_storage1 = "./storage/bcb/cdc/dolar/dolar_teste.parquet"
+path_storage1 = "./storage/bcb/full_load/dolar_20261123T200328Z.parquet"
 # path_storage2 = "./storage/BTC_full_load.parquet"
 
 df1 = pd.read_parquet(path=path_storage1)
