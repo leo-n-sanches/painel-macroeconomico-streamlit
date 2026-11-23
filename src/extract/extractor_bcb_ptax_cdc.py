@@ -38,23 +38,6 @@ colunas = [
 
 # %%
 
-# Diário
-
-# Dólar = https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaDia(moeda=@moeda,dataCotacao=@dataCotacao)?@moeda=%27USD%27&@dataCotacao=%2711-19-2026%27&$format=json
-# Euro = https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaDia(moeda=@moeda,dataCotacao=@dataCotacao)?@moeda=%27EUR%27&@dataCotacao=%2711-19-2026%27&$format=json
-
-# %%
-
-# OBSERVAÇÃO, o URL PTAX RETORNA VAZIO NOS FINAIS DE SEMANA
-
-# data_ptax = datetime.now(timezone.utc).strftime("%d-%m-%Y")
-# print(data_ptax)
-
-# # %%
-
-# data_ptax = "11-23-2026"
-# moeda = "EUR"
-
 class Bcb_Ptax_Pipeline:
     def __init__(self, 
                  S3_BUCKET: str, 
@@ -66,7 +49,8 @@ class Bcb_Ptax_Pipeline:
         self.s3_route_bcb = s3_route_bcb
         self.path_storage_bcb = path_storage_bcb
         self.time_now = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-        self.data_ptax = datetime.now(timezone.utc).strftime("%m-%d-%Y")
+        # self.data_ptax = datetime.now(timezone.utc).strftime("%m-%d-%Y")
+        self.data_ptax = "11-22-2026"
         self.s3_client = boto3.client("s3", region_name=S3_REGION)
         
         self.MAX_ARQUIVOS = 5
@@ -89,6 +73,11 @@ class Bcb_Ptax_Pipeline:
             for url in urls:
                 resp = requests.get(url)
                 response = resp.json()
+
+                if not response.get('value'):
+                    print("No data - Weekend")
+                    continue
+
                 df_temp = pd.json_normalize(response, record_path=['value'])[colunas]
                 df_list.append(df_temp)
                 
@@ -124,9 +113,14 @@ class Bcb_Ptax_Pipeline:
                 print(f"Erro ao enviar {file_name}: {erro}")
     
     def exec_all_bcb(self, moeda: list[str], moeda_save: list[str]):
-        resultado = self.extract_urls(moeda=moeda)
-        df_list = self.list_dfs(urls=resultado)
-        self.save_files(moeda_save=moeda_save, df_list=df_list)
+            resultado = self.extract_urls(moeda=moeda)
+            df_list = self.list_dfs(urls=resultado)
+
+            if not df_list:
+                 return
+
+            self.save_files(moeda_save=moeda_save, df_list=df_list)
+
 
 # %%
 
