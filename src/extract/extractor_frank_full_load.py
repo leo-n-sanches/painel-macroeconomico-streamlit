@@ -45,7 +45,7 @@ class Etl_Frankfurther_Cdc:
         resp = requests.get(url)
         response = resp.json()
         (pd.json_normalize(response)[colunas]
-         .to_parquet(f"{self.path_storage_frank}yuan_{self.time_now}.parquet", index=False))
+         .to_parquet(f"{self.path_storage_frank}yuan_{self.time_now}.parquet"))
 
     def sender_s3(self):
         s3_client = boto3.client("s3", region_name=S3_REGION)
@@ -70,5 +70,6 @@ class Etl_Frankfurther_Cdc:
 #                 s3_route_frank=s3_route_frank,
 #                 path_storage_frank=path_storage_frank,
 #                 S3_REGION=S3_REGION,
+
 #                 data_range=data_range
 #                 ).exec_all_frank()
