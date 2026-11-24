@@ -16,3 +16,7 @@ wheels/
 # Data files
 *.csv
 *.parquet
+*.json
+
+# folder
+src/extract/extractors_parquet/
