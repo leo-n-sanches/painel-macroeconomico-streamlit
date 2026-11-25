@@ -20,3 +20,4 @@ wheels/
 
 # folder
 src/extract/extractors_parquet/
+src/extract/extractors_json/

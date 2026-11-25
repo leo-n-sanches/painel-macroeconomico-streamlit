@@ -1,37 +1,39 @@
 # %%
 
 import os
+import sys
+import time
 from datetime import datetime, timezone
 
 import boto3
 import dotenv
 import requests
-from botocore.exceptions import ClientError
-from alpha_cdc import (
+from botocore.exceptions import ClientError, BotoCoreError
+from alpha import (
     name_list_alpha,
     path_storage_alpha,
     s3_route_alpha,
     urls_alpha,
 )
-from bcb_cdc import (
+from bcb import (
     name_list_bcb,
     path_storage_bcb,
     s3_route_bcb,
     urls_bcb,
 )
-from bcb_ptax_cdc import (
+from bcb_ptax import (
     name_list_ptax,
     path_storage_ptax,
     s3_route_ptax,
     urls_ptax,
 )
-from brapi_cdc import (
+from brapi import (
     name_list_brapi,
     path_storage_brapi,
     s3_route_brapi,
     urls_brapi,
 )
-from frank_cdc import (
+from frank import (
     name_list_frank,
     path_storage_frank,
     s3_route_frank,
@@ -65,7 +67,7 @@ all_s3_route = [s3_route_brapi,
                 s3_route_alpha]
 
 # %%
-class Brapi_S3_Pipeline_Cdc:
+class Pipeline_Cdc:
     def __init__(self, 
                  S3_BUCKET: str, 
                  S3_REGION: str, 
@@ -83,20 +85,29 @@ class Brapi_S3_Pipeline_Cdc:
         self.all_s3_route = all_s3_route
         
         self.MAX_ARCHIVES = 10
-        self.counter = 0
+        self.failures = []
 
-    def write_json(self) -> list:
+    def write_json(self):
 
         for url_list, name_list, path_list in zip(self.all_url, self.all_lists, self.all_path_storage):
 
             path = path_list[0]
 
             for url, name in zip(url_list, name_list):
-                resp = requests.get(url)
-                dados = resp.json()
+
+                try:
+                    resp = requests.get(url, timeout=180)
+                    time.sleep(15)
+                    resp.raise_for_status()
+                    dados = resp.json()
+                except (requests.RequestException, ValueError) as erro:
+                    print(f"Falha na extração de {name} erro: {erro}")
+                    self.failures.append(name)
+                    continue
 
                 if any(chave in dados for chave in ("Information", "Note", "Error Message")):
                     print(f"Limite atingido para API na extração de {name}")
+                    self.failures.append(name)
                     continue
 
                 if "value" in dados and len(dados["value"]) == 0:
@@ -138,20 +149,28 @@ class Brapi_S3_Pipeline_Cdc:
                     )
                     print(f"Enviado {file_name}. Arquivo {counter} | Limite {self.MAX_ARCHIVES}")
 
-                except ClientError as erro:
+                except (ClientError, BotoCoreError) as erro:
+                    self.failures.append(name)
                     print(f"Erro ao enviar {file_name}: {erro}")
 
     def exec_all_brapi(self):
         self.write_json()
         self.save_files()
+        return self.failures
 
 # %%
+if __name__ == "__main__":
+    fails = Pipeline_Cdc(
+        S3_BUCKET=S3_BUCKET,
+        S3_REGION=S3_REGION,
+        all_url=all_url,
+        all_lists=all_lists,
+        all_path_storage=all_path_storage,
+        all_s3_route=all_s3_route
+        ).exec_all_brapi()
 
-pipeline = Brapi_S3_Pipeline_Cdc(
-    S3_BUCKET=S3_BUCKET,
-    S3_REGION=S3_REGION,
-    all_url=all_url,
-    all_lists=all_lists,
-    all_path_storage=all_path_storage,
-    all_s3_route=all_s3_route
-    ).exec_all_brapi()
+    if fails:
+        print(f"Execução terminou com {len(fails)} falha(s): {', '.join(fails)}")
+        sys.exit(1)
+
+    print("Execução concluída sem falhas.")
