@@ -1,0 +1,31 @@
+name: ETL_Panel
+
+on:
+  schedule:
+    - cron: '0 23 * * *'
+  workflow_dispatch:
+
+jobs:
+  test_schedule:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Instalar dependências
+        run: uv sync --locked
+
+      - name: Rodar meu script
+        env:
+          BRAPI_TOKEN: ${{ secrets.BRAPI_TOKEN }}
+          ALPHA_TOKEN: ${{ secrets.ALPHA_TOKEN }}
+          S3_REGION: ${{ secrets.S3_REGION }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: uv run src/extract/extractor.py

@@ -7,8 +7,8 @@ import dotenv
 dotenv.load_dotenv()
 
 ALPHA_TOKEN = os.getenv("ALPHA_TOKEN")
-s3_route_alpha = ["painel_macro/full_load/alpha/"]
-path_storage_alpha = ["./storage/alpha/full_load/"]
+s3_route_alpha = ["painel_macro/cdc/alphavantage/"]
+path_storage_alpha = ["./storage/alpha/cdc/"]
 
 name_list_alpha = [
     "aapl",
